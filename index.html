@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgo=">
+  <title>Contador Twitter</title>
+</head>
+<body>
+
+  <h1>Contador de caracteres para ensayar tuits</h1>
+
+  <textarea id="tuit" rows="8" cols="55"></textarea>
+  <p><span id="charNum">0</span> caracteres de 280 posibles.</p>
+  
+  <ul>
+    <li>Cada caracter normal y corriente cuesta 1 caracter (Capitán Obvio)</li>
+    <li>Los #hashtags y los @username no tienen <em>coste</em> adicional</li>
+    <li>Cada link cuesta 23 caracteres (da igual si el link tiene más o menos de 23 caracteres)</li>
+    <li>Cada <a href="https://emojipedia.com" target="_blank">emoji</a> cuesta 2 caracteres</li>
+  </ul>
+
+  <hr>
+
+  <h3>Por qué</h3>
+  <ul>
+    <li>El cajetín de Twitter donde publicas los tuits no es un sitio seguro para ensayar tuits. Es muy posible publicarlo sin querer antes de tiempo.</li>
+    <li>La solución suele pasar por escribir el tuit fuera de Twitter, en cualquier editor de texto, y luego copiar-pegar lo que hemos escrito al cajetín de Twitter y, por fin, publicar. Pero no es fácil saber si estamos dentro del margen de los 280 caracteres en un editor de texto. Aunque nuestro editor de textos cuente caracteres, no está informado de una peculiaridad de Twitter: Cada link incluido en el tuit cuenta 23 caracteres, sin importar si el largo del link es mayor o menor de 23 caracteres.</li>
+    <li>En Internet se pueden encontrar algunos contadores de caracteres de Twitter, como <a href="https://charactercounter.com/twitter" target="_blank">Twitter Character Counter</a> o <a href="https://twittercharactercount.com/" target="_blank">Twitter Character Count</a>, pero me ha sorprendido muchísimo que, a pesar de servir para esta única tarea, no han tenido en cuenta el detalle de que los links rompen cualquier contador de caracteres tradicional.</li>
+  </ul>
+  <p>Así que me fabriqué uno. 😎</p>
+  <p>Ya lo pondré más bonito cuando tenga tiempo.</p>
+  <p>Si quieres mejorarlo o copiarlo, haz lo que quieras: <a href="https://github.com/quenerapu/twitter-counter" target="_blank">es software libre</a>.</p>
+
+  <script>
+
+    const tuit = document.querySelector("#tuit");
+
+    const maxTwitterLength = 280;
+    const TwitterLinkLength = 23;
+//  const TwitterEmojiLength = 2;
+
+    tuit.onkeyup = function() {
+
+      const linkCount = (tuit.value.match(/\b(https?:\/\/\S*\b)/g) || []).length;
+      const emojiCount = (tuit.value.match(/\b(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/g) || []).length;
+      const your_array = tuit.value.match(/\b(https?:\/\/\S*\b)/g) || [];
+
+      rawLinksLength = your_array.join("").length;
+      counter = tuit.value.length + (linkCount * TwitterLinkLength) - rawLinksLength;
+
+      document.querySelector("#charNum").innerHTML = counter > maxTwitterLength ? "<span style=\"color:red;font-weight:bold;\">"+counter+"</span>" : counter;
+
+    }
+
+  </script>
+
+</body>
+</html>
